@@ -1,0 +1,35 @@
+{
+  "name": "fastify-decorators",
+  "version": "1.0.0",
+  "description": "Decorators for fastify",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "tsc",
+    "lint": "eslint ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rotaileresmi/fastify-decorators.git"
+  },
+  "author": "TEA",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/rotaileresmi/fastify-decorators/issues"
+  },
+  "homepage": "https://github.com/rotaileresmi/fastify-decorators#readme",
+  "devDependencies": {
+    "@types/mocha": "^8.2.0",
+    "@types/node": "^14.14.22",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "fastify": "^3.11.0",
+    "joi": "^17.3.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}
