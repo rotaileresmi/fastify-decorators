@@ -11,6 +11,7 @@ import ControllerAbstract from './controller.abstract';
 import IController from './controller.interface';
 
 import Validation from './validation';
+import Authentication from './authentication';
 
 
 export {
@@ -23,4 +24,5 @@ export {
   ControllerAbstract,
   IController,
   Validation,
+  Authentication,
 };

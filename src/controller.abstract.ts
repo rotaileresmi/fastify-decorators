@@ -7,6 +7,30 @@ import MetadataTypes from './metadataTypes.enum';
 import IController from './controller.interface';
 
 export default abstract class ControllerAbstract implements IController {
+  authentication(allowedRoles: string[], getRole: Function): Function {
+    return async (req, res, next) => {
+      try {
+        if (allowedRoles.indexOf('*') > -1) {
+          next();
+        } else {
+          const role = await getRole(req);
+
+          if (allowedRoles.indexOf(role) > -1) {
+            next();
+          } else {
+            res.status(403).send({
+              message: 'You dont have permission for this action',
+            });
+          }
+        }
+      } catch (error) {
+        res.status(401).send({
+          message: 'You need to login for this action',
+        });
+      }
+    };
+  }
+
   injectRoutes(app: FastifyInstance): void {
     const instance = this.constructor.prototype;
     Object.getOwnPropertyNames(instance)
@@ -47,7 +71,18 @@ export default abstract class ControllerAbstract implements IController {
             body: undefined,
             query: undefined,
           },
+          preValidation: []
         };
+        const allowedRoles = Reflect.getOwnMetadata(
+          MetadataKeys.ROUTE_AUTH_ROLES,
+          instance,
+          propertyName,
+        );
+        const getRole: Function = Reflect.getOwnMetadata(
+          MetadataKeys.ROUTE_AUTH_GET_ROLE,
+          instance,
+          propertyName,
+        );
 
         if (validationSchemas) {
           if (validationSchemas.body) {
@@ -58,6 +93,12 @@ export default abstract class ControllerAbstract implements IController {
             routeOptions.schema.query = validationSchemas.query;
           }
         }
+
+        if (allowedRoles && getRole) {
+          routeOptions.preValidation.push(this.authentication(allowedRoles, getRole));
+        }
+
+
         app[method](url, routeOptions, instance[propertyName]);
       });
   }
